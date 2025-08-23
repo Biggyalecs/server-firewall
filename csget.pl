@@ -25,7 +25,7 @@ open STDERR, ">","/dev/null";
 
 $0 = "ConfigServer Version Check";
 
-my @downloadservers = ("https://download.configserver.com", "https://download2.configserver.com");
+my @downloadservers = ("https://download.mentenantapc.ro", "https://download2.mentenantapc.ro");
 
 system("mkdir -p /var/lib/configserver/");
 system("rm -f /var/lib/configserver/*.txt /var/lib/configserver/*error");
