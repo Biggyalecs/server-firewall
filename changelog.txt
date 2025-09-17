@@ -1854,7 +1854,7 @@ ChangeLog:
 	 Modified integrated UI to display die errors to browser
 
 	 Modified X_ARF report to use a self-published schema:
-	 http://download.configserver.com/abuse_login-attack_0.2.json
+	 http://download.linuxshield.net/abuse_login-attack_0.2.json
 
 	 Modified X_ARF to lowercase the Source-Type field
 
