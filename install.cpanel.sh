@@ -1,8 +1,8 @@
 #!/bin/sh
 ###############################################################################
-# Copyright 2006-2018, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 
 umask 0177
@@ -43,7 +43,7 @@ cp -avf install.txt /etc/csf/
 echo
 echo "Checking Perl modules..."
 chmod 700 os.pl
-RETURN=`./os.pl`
+RETURN=$(perl os.pl)
 if [ "$RETURN" = 1 ]; then
 	echo
 	echo "FAILED: You MUST install the missing perl modules above before you can install csf. See /etc/csf/install.txt for installation details."

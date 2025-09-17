@@ -1,9 +1,9 @@
 #!/usr/bin/perl
-#WHMADDON:csf:ConfigServer Security & Firewall
+#WHMADDON:csf:LinuxShield Security & Firewall
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 ## no critic (RequireUseWarnings, ProhibitExplicitReturnUndef, ProhibitMixedBooleanOperators, RequireBriefOpen)
 use strict;
@@ -137,10 +137,11 @@ unless ($FORM{action} eq "tailcmd" or $FORM{action} =~ /^cf/ or $FORM{action} eq
 #	open(STDERR, ">&STDOUT");
 	open ($SCRIPTOUT, '>', \$templatehtml);
 	select $SCRIPTOUT;
-
+	my $cssfile = '$images/configserver.css';
+	my $mtime   = (stat($cssfile))[9] || time();
 	print <<EOF;
 	<!-- $bootstrapcss -->
-	<link href='$images/configserver.css' rel='stylesheet' type='text/css'>
+	<link href='$images/configserver.css?$mtime' rel='stylesheet' type='text/css'>
 	$jqueryjs
 	$bootstrapjs
 <style>
@@ -174,7 +175,7 @@ unless ($FORM{action} eq "tailcmd" or $FORM{action} =~ /^cf/ or $FORM{action} eq
 	print <<EOF;
 <div id="loader"></div><br />
 <div class='panel panel-default'>
-<h4><img src='$images/csf_small.png' style='padding-left: 10px'> ConfigServer Security &amp; Firewall - csf v$myv</h4></div>
+<h4><img src='$images/csf_small.png' style='padding-left: 10px'> LinuxShield Security &amp; Firewall - csf v$myv</h4></div>
 EOF
 	if ($reregister ne "") {print $reregister}
 }

@@ -1,11 +1,11 @@
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 
 
-ConfigServer Security & Firewall
+LinuxShield Security & Firewall
 ################################
 
 This suite of scripts provides:
@@ -86,7 +86,7 @@ This document contains:
 ###############
 
 
-ConfigServer Firewall (csf)
+LinuxShield Firewall (csf)
 ===========================
 
 We have developed an SPI iptables firewall that is straight-forward, easy and
@@ -109,7 +109,7 @@ Directory structure:
 Login Failure Daemon (lfd)
 ==========================
 
-To complement the ConfigServer Firewall, we have developed a daemon process
+To complement the LinuxShield Firewall, we have developed a daemon process
 that runs all the time and periodically (every X seconds) scans the latest log
 file entries for login attempts against your server that continually fail
 within a short period of time. Such attempts are often called "Brute-force
@@ -1697,7 +1697,7 @@ Note: None of the apf conf files are used and are ignored by csf.
 The Firewall UI option in NodeWorx should now not be used and any changes made
 there will not be reflected in iptables.
 
-There is a UI option under "ConfigServer Services" for "ConfigServer Firewall &
+There is a UI option under "LinuxShield Services" for "LinuxShield Firewall &
 Security" that should now be used.
 
 The installation will also replace the Firewall page in NodeWorx with a dummy
@@ -1721,7 +1721,7 @@ lfd.
 
 CWP integration is available for csf. Since CWP already has some custom
 modifications, these have been taken into account. To access the now inbuilt UI
-in CWP, there is a new menu option in CWP > ConfigServer Scripts > ConfigServer
+in CWP, there is a new menu option in CWP > LinuxShield Scripts > LinuxShield
 Firewall.
 
 There is now an option in /etc/csf/csf.conf for LF_CWP for login failure

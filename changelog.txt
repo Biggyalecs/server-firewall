@@ -1,5 +1,15 @@
 ChangeLog:
 
+14.28 - New color scheme
+	  - Statistics about installs
+	  - New UI for LSCI for configure and install
+
+14.27 - Add donation via PayPal
+
+14.26 - Add LSCI - Cpanel Interface to unblock ips from front-end
+
+14.25 - Change download server
+        
 14.24 - Fixed regression bug in v14.23 "Modified UI HTTP header checks to be
         case agnostic"
 
@@ -1185,7 +1195,7 @@ ChangeLog:
 
 	 Removed use of Cpanel::cPanelFunctions as it is now being withdrawn
 
-	 Updated common ConfigServer UI
+	 Updated common LinuxShield UI
 
 	 Fix instance where cluster block timeout for temporary blocks was not
 	 being sent
@@ -1630,7 +1640,7 @@ ChangeLog:
 7.70   - Removed PayPal Donation buttons due to recent abuse
 
 7.69   - Modified LF_CSF on cPanel servers to detect a change in the cPanel
-	 version and then trigger a restart of ConfigServer scripts (added
+	 version and then trigger a restart of LinuxShield scripts (added
 	 cxs pure-uploadscript restart)
 
 7.68   - Added Debian v8 and Ubuntu v15 support
@@ -2405,7 +2415,7 @@ ChangeLog:
 	 Added support for cPanel v11.38.1+ Custom ACL driver. This creates an
 	 ACL (software-ConfigServer-csf) which must be used to grant resellers
 	 access via "WHM > Edit Reseller Nameservers and Privileges > Third
-	 Party Services > ConfigServer Security & Firewall (Reseller UI)" when
+	 Party Services > LinuxShield Security & Firewall (Reseller UI)" when
 	 running cPanel v11.38.1+
 
 	 Added Server Check for AppConfig restrictions for cPanel v11.38.1+
@@ -5688,7 +5698,7 @@ ETH_DEVICE_SKIP = ""
 
 2.09   - Removed the nodev check on /tmp etc
 
-2.08   - Changed app name to ConfigServer Security & Firewall
+2.08   - Changed app name to LinuxShield Security & Firewall
 
          New Feature - Added Server Security Check report to WHM UI
 

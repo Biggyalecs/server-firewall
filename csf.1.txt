@@ -1,10 +1,10 @@
 .TH csf 1
 .SH NAME
-csf \- ConfigServer & Security Firewall
+csf \- LinuxShield & Security Firewall
 .SH SYNOPSIS
 .B csf [OPTIONS]
 .SH DESCRIPTION
-This manual documents the csf command line options for the ConfigServer & Security Firewall. See /etc/csf/csf.conf and /etc/csf/readme.txt for more detailed information on how to use and configure this application.
+This manual documents the csf command line options for the LinuxShield & Security Firewall. See /etc/csf/csf.conf and /etc/csf/readme.txt for more detailed information on how to use and configure this application.
 .SH OPTIONS
 .TP
 .B

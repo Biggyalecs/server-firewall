@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 ## no critic (RequireUseWarnings, ProhibitExplicitReturnUndef, ProhibitMixedBooleanOperators, RequireBriefOpen, RequireLocalizedPunctuationVars)
 # start main
@@ -334,7 +334,7 @@ if ($cxsreputation and -e "/etc/cxs/cxs.blocklists") {
 		$line =~ s/$cleanreg//g;
 		if ($line =~ /^(\s|\#|$)/) {next}
 		my ($name,$interval,$max,$url) = split(/\|/,$line);
-		$url =~ s/download\.configserver\.com/$config{DOWNLOADSERVER}/g;
+		$url =~ s/download\.linuxshield\.net/$config{DOWNLOADSERVER}/g;
 		if ($all and $name ne "CXS_ALL") {next}
 		if ($name =~ /^\w+$/) {
 			$name = substr(uc $name, 0, 25);
@@ -3238,7 +3238,7 @@ sub csfcheck {
 						flock ($THISLOCK, LOCK_EX | LOCK_NB) or &childcleanup("*Lock Error* [$lockstr] still active - section skipped");
 						print $THISLOCK time;
 
-						logfile("cPanel upgrade detected, restarting ConfigServer services...");
+						logfile("cPanel upgrade detected, restarting LinuxShield services...");
 
 						if (-e "/var/lib/csf/cpanel.new") {unlink "/var/lib/csf/cpanel.new"}
 						open (my $CPANELNEW, ">", "/var/lib/csf/cpanel.new");
@@ -9890,7 +9890,7 @@ sub ui {
 						print "Content-type: text/html\r\n";
 						print "\r\n";
 						print "<!DOCTYPE html>\n";
-						print "<HTML>\n<TITLE>ConfigServer Security & Firewall</TITLE>\n<BODY style='font-family:Arial, Helvetica, sans-serif;' onload='document.getElementById(\"user\").focus()'>\n";
+						print "<HTML>\n<TITLE>LinuxShield Security & Firewall</TITLE>\n<BODY style='font-family:Arial, Helvetica, sans-serif;' onload='document.getElementById(\"user\").focus()'>\n";
 						if ($valid eq "failed") {print "<div align='center'><h2>Login Failed</h2></div>\n"}
 						print "<form action='/' method='post'><div align='center'>\n";
 						print "<table align='center' border='0' cellspacing='0' cellpadding='4' bgcolor='#FFFFFF' style='border:1px solid #990000'>\n";
@@ -9966,7 +9966,7 @@ sub ui {
 <!doctype html>
 <html lang='en' $htmltag>
 <head>
-<title>ConfigServer Security &amp; Firewall</title>
+<title>LinuxShield Security &amp; Firewall</title>
 <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 $bootstrapcss
@@ -10016,8 +10016,8 @@ EOF
 									print "</div>\n";
 									print <<EOF;
 <div class='panel panel-default panel-body'>
-<img align='absmiddle' src='$images/csf_small.png' alt='ConfigServer Firewall &amp; Security' style='float:left'>
-<h3>ConfigServer Security &amp; Firewall - csf v$myv</h3>
+<img align='absmiddle' src='$images/csf_small.png' alt='LinuxShield Firewall &amp; Security' style='float:left'>
+<h3>LinuxShield Security &amp; Firewall - csf v$myv</h3>
 </div>
 EOF
 								}
@@ -10150,7 +10150,7 @@ EOF
 <!doctype html>
 <html lang='en'>
 <head>
-<title>ConfigServer eXploit Scanner</title>
+<title>LinuxShield eXploit Scanner</title>
 <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 $bootstrapcss
@@ -10176,17 +10176,19 @@ EOF
 										print "</div>\n";
 										print <<EOF;
 <div class='panel panel-default panel-body'>
-<img align='absmiddle' src='$images/cxs_small.png' alt='ConfigServer eXploit Scanner' style='float:left'>
-<h3>ConfigServer eXploit Scanner - cxs v$myv</h3>
+<img align='absmiddle' src='$images/cxs_small.png' alt='LinuxShield eXploit Scanner' style='float:left'>
+<h3>LinuxShield eXploit Scanner - cxs v$myv</h3>
 </div>
 EOF
 									} else {
+										my $cssfile = '$images/configserver.css';
+	 									my $mtime   = (stat($cssfile))[9];
 										print <<EOF;
 <!doctype html>
 <html lang='en'>
 <head>
 	$bootstrapcss
-	<link href='$images/configserver.css' rel='stylesheet' type='text/css'>
+	<link href='$images/configserver.css?$mtime' rel='stylesheet' type='text/css'>
 	$jqueryjs
 	$bootstrapjs
 </head>

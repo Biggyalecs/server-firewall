@@ -1,7 +1,7 @@
 ###############################################################################
 # Copyright 2006-2019, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 # The following is a list of Reseller accounts that you want to allow access to
 # limited csf functionality.
@@ -43,5 +43,5 @@
 #
 # NOTE: As of version cPanel v11.8.1 you must additionally grant resellers
 # access via "WHM > Edit Reseller Nameservers and Privileges > Third Party
-# Services > ConfigServer Security & Firewall (Reseller UI)".
+# Services > LinuxShield Security & Firewall (Reseller UI)".
 #

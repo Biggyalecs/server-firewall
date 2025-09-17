@@ -1,7 +1,7 @@
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 ## no critic (RequireUseWarnings, ProhibitExplicitReturnUndef, ProhibitMixedBooleanOperators, RequireBriefOpen)
 package ConfigServer::DisplayUI;
@@ -14,6 +14,9 @@ use File::Copy;
 use Net::CIDR::Lite;
 use IPC::Open3;
 
+use ConfigServer::LSCIConfig;
+use ConfigServer::DenyTable;
+use ConfigServer::AllowTable;
 use ConfigServer::Config;
 use ConfigServer::CheckIP qw(checkip);
 use ConfigServer::Ports;
@@ -84,7 +87,7 @@ sub main {
 
 	if ($config{RESTRICT_UI} == 2) {
 		print "<table class='table table-bordered table-striped'>\n";
-		print "<tr><td><font color='red'>csf UI Disabled via the RESTRICT_UI option in /etc/csf/csf.conf</font></td></tr>\n";
+		print "<tr><td><font color='red'>lsf UI Disabled via the RESTRICT_UI option in /etc/csf/csf.conf</font></td></tr>\n";
 		print "</tr></table>\n";
 		exit;
 	}
@@ -104,13 +107,13 @@ sub main {
 		print "<div><p>Checking version...</p>\n\n";
 		my ($upgrade, $actv) = &manualversion($myv);
 		if ($upgrade) {
-			print "<form action='$script' method='post'><button name='action' value='upgrade' type='submit' class='btn btn-default'>Upgrade csf</button> A new version of csf (v$actv) is available. Upgrading will retain your settings. <a href='https://$config{DOWNLOADSERVER}/csf/changelog.txt' target='_blank'>View ChangeLog</a></form>\n";
+			print "<form action='$script' method='post'><button name='action' value='upgrade' type='submit' class='btn btn-default'>Upgrade lsf</button> A new version of lsf (v$actv) is available. Upgrading will retain your settings. <a href='https://$config{DOWNLOADSERVER}/csf/changelog.txt' target='_blank'>View ChangeLog</a></form>\n";
 		} else {
 			if ($actv ne "") {
 				print "<div class='bs-callout bs-callout-danger'>$actv</div>\n";
 			}
 			else {
-				print "<div class='bs-callout bs-callout-info'>You are running the latest version of csf (v$myv). An Upgrade button will appear here if a new version becomes available</div>\n";
+				print "<div class='bs-callout bs-callout-info'>You are running the latest version of LinuxShield Firewall (v$myv). An Upgrade button will appear here if a new version becomes available</div>\n";
 			}
 		}
 		print "</div>\n";
@@ -177,7 +180,7 @@ sub main {
 		&printreturn;
 	}
 	elsif ($FORM{action} eq "restart") {
-		print "<div><p>Restarting csf...</p>\n";
+		print "<div><p>Restarting lsf...</p>\n";
 		&resize("top");
 		print "<pre class='comment' style='white-space: pre-wrap; height: 500px; overflow: auto; resize:both; clear:both' id='output'>\n";
 		&printcmd("/usr/sbin/csf","-sf");
@@ -186,7 +189,7 @@ sub main {
 		&printreturn;
 	}
 	elsif ($FORM{action} eq "restartq") {
-		print "<div><p>Restarting csf via lfd...</p>\n<pre class='comment' style='white-space: pre-wrap;'>\n";
+		print "<div><p>Restarting lsf via lfd...</p>\n<pre class='comment' style='white-space: pre-wrap;'>\n";
 		&printcmd("/usr/sbin/csf","-q");
 		print "</pre>\n<p>...<b>Done</b>.</p></div>\n";
 		&printreturn;
@@ -323,9 +326,9 @@ sub main {
 	}
 	elsif ($FORM{action} eq "enable") {
 		if ($config{THIS_UI}) {
-			print "<div><p>You must login to the root shell to enable csf using:\n<p><b>csf -e</b></p>\n";
+			print "<div><p>You must login to the root shell to enable lsf using:\n<p><b>lsf -e</b></p>\n";
 		} else {
-			print "<div><p>Enabling csf...</p>\n";
+			print "<div><p>Enabling lsf...</p>\n";
 			&resize("top");
 			print "<pre class='comment' style='white-space: pre-wrap; height: 500px; overflow: auto; resize:both; clear:both' id='output'>\n";
 			&printcmd("/usr/sbin/csf","-e");
@@ -476,6 +479,18 @@ EOF
 				print "Executable [$config{TAIL}] invalid";
 			}
 		}
+	}
+	elsif ($FORM{action} eq 'lcsiconfig') {
+    return &ConfigServer::LSCIConfig::LSCI_config();
+	}
+	elsif ($FORM{action} eq 'lscireinstall') {
+    return &ConfigServer::LSCIConfig::LSCI_reinstall();
+	}
+	elsif ($FORM{action} eq 'lsciuninstall') {
+    return &ConfigServer::LSCIConfig::LSCI_uninstall();
+	}
+	elsif ($FORM{action} eq 'installlsci') {
+    return &ConfigServer::LSCIConfig::LSCI_install();
 	}
 	elsif ($FORM{action} eq "loggrep") {
 		$FORM{lines} =~ s/\D//g;
@@ -839,7 +854,7 @@ EOF
 		&printreturn;
 	}
 	elsif ($FORM{action} eq "restartboth") {
-		print "<div><p>Restarting csf...</p>\n";
+		print "<div><p>Restarting lsf...</p>\n";
 		&resize("top");
 		print "<pre class='comment' style='white-space: pre-wrap; height: 500px; overflow: auto; resize:both; clear:both' id='output'>\n";
 		&printcmd("/usr/sbin/csf","-sf");
@@ -1065,15 +1080,19 @@ EOF
 		&printreturn;
 	}
 	elsif ($FORM{action} eq "crestart") {
-		print "<div><p>Cluster restart csf and lfd...</p>\n<pre class='comment' style='white-space: pre-wrap;'>\n";
+		print "<div><p>Cluster restart lsf and lfd...</p>\n<pre class='comment' style='white-space: pre-wrap;'>\n";
 		&printcmd("/usr/sbin/csf --crestart");
 		print "</pre>\n<p>...<b>Done</b>.</p></div>\n";
 		&printreturn;
 	}
-	elsif ($FORM{action} eq "allow") {
-		&editfile("/etc/csf/csf.allow","saveallow");
-		&printreturn;
-	}
+	elsif ($FORM{action} eq "allowop") {
+    ConfigServer::AllowTable::handle_action(\%FORM);
+    &printreturn;
+}
+elsif ($FORM{action} eq "allow") {
+    ConfigServer::AllowTable::show(\%FORM);
+    &printreturn;
+}
 	elsif ($FORM{action} eq "saveallow") {
 		&savefile("/etc/csf/csf.allow","both");
 		&printreturn;
@@ -1142,9 +1161,18 @@ EOF
 		&savefile("/etc/csf/csf.logfiles","lfd");
 		&printreturn;
 	}
+	#elsif ($FORM{action} eq "deny") {
+	#	&editfile("/etc/csf/csf.deny","savedeny");
+	#	&printreturn;
+	#}
+	elsif ($FORM{action} eq "denyop") {
+    	ConfigServer::DenyTable::handle_action(\%FORM);
+    	&printreturn;
+	}
+
 	elsif ($FORM{action} eq "deny") {
-		&editfile("/etc/csf/csf.deny","savedeny");
-		&printreturn;
+    	ConfigServer::DenyTable::render_table(\%FORM);
+    	&printreturn;
 	}
 	elsif ($FORM{action} eq "savedeny") {
 		&savefile("/etc/csf/csf.deny","both");
@@ -1356,7 +1384,7 @@ EOD
 			if ($insane) {print "<br>WARNING: $key sanity check. $key = \"$newconfig{$key}\". Recommended range: $range (Default: $default)\n"}
 		}
 
-		print "<div>Changes saved. You should restart both csf and lfd.</div>\n";
+		print "<div>Changes saved. You should restart both lsf and lfd.</div>\n";
 		print "<div><form action='$script' method='post'><input type='hidden' name='action' value='restartboth'><input type='submit' class='btn btn-default' value='Restart csf+lfd'></form></div>\n";
 		&printreturn;
 	}
@@ -2054,6 +2082,17 @@ EOF
 		}
 		$tempbans .= "<code>$tempcnt</code> temp IP allows)";
 
+		sub format_with_dots {
+			my $n = shift;
+			return '0' unless defined $n;
+			my $sign = $n < 0 ? '-' : '';
+			$n = abs($n);
+			my $s = reverse $n;
+			$s =~ s/(\d{3})(?=\d)/$1./g;
+			$s = reverse $s;
+			return $sign . $s;
+		}
+
 		my $permcnt = 0;
 		if (! -z "/etc/csf/csf.deny") {
 			sysopen (my $IN, "/etc/csf/csf.deny", O_RDWR);
@@ -2065,7 +2104,7 @@ EOF
 			}
 			close ($IN);
 		}
-		my $permbans = "(Currently: <code>$permcnt</code> permanent IP bans)";
+		my $permbans = "(Currently: <code>" . format_with_dots($permcnt) . "</code> permanent IP bans)";
 
 		$permcnt = 0;
 		if (! -z "/etc/csf/csf.allow") {
@@ -2088,7 +2127,7 @@ EOF
 		print "<ul class='nav nav-tabs' id='myTabs' style='font-weight:bold'>\n";
 		print "<li class='active'><a data-toggle='tab' href='#' id='tabAll'>All</a></li>\n";
 		print "<li><a data-toggle='tab' href='#home'>Info</a></li>\n";
-		print "<li><a data-toggle='tab' href='#csf'>csf</a></li>\n";
+		print "<li><a data-toggle='tab' href='#csf'>lsf</a></li>\n";
 		print "<li><a data-toggle='tab' href='#lfd'>lfd</a></li>\n";
 		if ($config{CLUSTER_SENDTO}) {
 			print "<li><a data-toggle='tab' href='#cluster'>Cluster</a></li>\n";
@@ -2101,6 +2140,7 @@ EOF
 		print "<form action='$script' method='post'>\n";
 		print "<table class='table table-bordered table-striped'>\n";
 		print "<thead><tr><th colspan='2'>Server Information</th></tr></thead>";
+		
 		print "<tr><td><button name='action' value='servercheck' type='submit' class='btn btn-default'>Check Server Security</button></td><td style='width:100%'>Perform a basic security, stability and settings check on the server</td></tr>\n";
 		print "<tr><td><button name='action' value='readme' type='submit' class='btn btn-default'>Firewall Information</button></td><td style='width:100%'>View the csf+lfd readme.txt file</td></tr>\n";
 		print "<tr><td><button name='action' value='logtail' type='submit' class='btn btn-default'>Watch System Logs</button></td><td style='width:100%'>Watch (tail) various system log files (listed in csf.syslogs)</td></tr>\n";
@@ -2124,38 +2164,48 @@ EOF
 		print "<thead><tr><th colspan='2'>Upgrade</th></tr></thead>";
 		my ($upgrade, $actv) = &csgetversion("csf",$myv);
 		if ($upgrade) {
-			print "<tr><td><button name='action' value='upgrade' type='submit' class='btn btn-default'>Upgrade csf</button></td><td style='width:100%'><b>A new version of csf (v$actv) is available. Upgrading will retain your settings<br><a href='https://$config{DOWNLOADSERVER}/csf/changelog.txt' target='_blank'>View ChangeLog</a></b></td></tr>\n";
+			print "<tr><td><button name='action' value='upgrade' type='submit' class='btn btn-default'>Upgrade csf</button></td><td style='width:100%'><b>A new version of LinuxShield firewall (v$actv) is available. Upgrading will retain your settings<br><a href='https://$config{DOWNLOADSERVER}/csf/changelog.txt' target='_blank'>View ChangeLog</a></b></td></tr>\n";
 		} else {
 			print "<tr><td><button name='action' value='manualcheck' type='submit' class='btn btn-default'>Manual Check</button></td><td>";
 			if ($actv ne "") {
 				print "(csget cron check) $actv</td></tr>\n";
 			}
 			else {
-				print "You are running the latest version of csf. An Upgrade button will appear here if a new version becomes available. New version checking is performed automatically by a daily cron job (csget)</td></tr>\n";
+				print "You are running the latest version of LinuxShield firewall. An Upgrade button will appear here if a new version becomes available. New version checking is performed automatically by a daily cron job (csget)</td></tr>\n";
 			}
 		}
 		if (!$config{INTERWORX} and (-e "/etc/apf" or -e "/usr/local/bfd")) {
 			print "<tr><td><button name='action' value='remapf' type='submit' class='btn btn-default'>Remove APF/BFD</button></td><td style='width:100%'>Remove APF/BFD from the server. You must not run both APF or BFD with csf on the same server</td></tr>\n";
 		}
+
+		#Cpanel unblock interface
+		unless (-e "/usr/local/sbin/linuxshield-unblock.sh") {
+		if (-e "/usr/local/cpanel/version") {
+				print "<tr><td colspan='2'>\n";
+				print "<div class='bs-callout bs-callout-info h4'>Add cpanel front-end interface to unblock ips <a href='https://LinuxShield.net/lsci' target='_blank'>LinuxShield Cpanel Interface (LSCI)</a></div>\n";
+				print "</td></tr>\n";
+				print "<tr><td><form action='$script' method='post'><button name='action' value='installlsci' type='submit' class='btn btn-default'>Install LSCI</button></form></td><td style='width:100%'>Add cpanel front-end interface to unblock ips <a href='https://LinuxShield.net/lsci' target='_blank'>LinuxShield Cpanel Interface (LSCI)</a></td></tr>\n";
+			}
+		}
 		unless (-e "/etc/cxs/cxs.pl") {
 			if (-e "/usr/local/cpanel/version" or $config{DIRECTADMIN} or $config{INTERWORX} or $config{VESTA} or $config{CWP} or $config{CYBERPANEL}) {
-				print "<tr><td colspan='2'>\n";
-				print "<div class='bs-callout bs-callout-info h4'>Add server and user data protection against exploits using <a href='https://configserver.com/cp/cxs.html' target='_blank'>ConfigServer eXploit Scanner (cxs)</a></div>\n";
-				print "</td></tr>\n";
+				<!-- print "<tr><td colspan='2'>\n";
+				print "<div class='bs-callout bs-callout-info h4'>Add server and user data protection against exploits using <a href='https://LinuxShield.net/cp/cxs.html' target='_blank'>LinuxShield eXploit Scanner (cxs)</a></div>\n";
+				print "</td></tr>\n"; -->
 			}
 		}
 		unless (-e "/etc/osm/osmd.pl") {
 			if (-e "/usr/local/cpanel/version" or $config{DIRECTADMIN}) {
-				print "<tr><td colspan='2'>\n";
-				print "<div class='bs-callout bs-callout-info h4'>Add outgoing spam monitoring and prevention using <a href='https://configserver.com/cp/osm.html' target='_blank'>ConfigServer Outgoing Spam Monitor(osm)</a></div>\n";
-				print "</td></tr>\n";
+				<!-- print "<tr><td colspan='2'>\n";
+				print "<div class='bs-callout bs-callout-info h4'>Add outgoing spam monitoring and prevention using <a href='https://LinuxShield.net/cp/osm.html' target='_blank'>LinuxShield Outgoing Spam Monitor(osm)</a></div>\n";
+				print "</td></tr>\n";-->
 			}
 		}
 		unless (-e "/usr/msfe/mschange.pl") {
 			if (-e "/usr/local/cpanel/version" or $config{DIRECTADMIN}) {
-				print "<tr><td colspan='2'>\n";
-				print "<div class='bs-callout bs-callout-info h4'>Add effective incoming virus and spam detection and user level processing using <a href='https://configserver.com/cp/msfe.html' target='_blank'>ConfigServer MailScanner Front-End (msfe)</a></div>\n";
-				print "</td></tr>\n";
+				<!-- print "<tr><td colspan='2'>\n";
+				print "<div class='bs-callout bs-callout-info h4'>Add effective incoming virus and spam detection and user level processing using <a href='https://LinuxShield.net/cp/msfe.html' target='_blank'>LinuxShield MailScanner Front-End (msfe)</a></div>\n";
+				print "</td></tr>\n";-->
 			}
 		}
 		print "</table>\n";
@@ -2165,25 +2215,25 @@ EOF
 
 		print "<div id='csf' class='tab-pane active'>\n";
 		print "<table class='table table-bordered table-striped'>\n";
-		print "<thead><tr><th colspan='2'>csf - Quick Actions</th></tr></thead>";
-		print "<tr><td><button onClick='\$(\"#qallow\").submit();' class='btn btn-default'>Quick Allow</button></td><td style='width:100%'><form action='$script' method='post' id='qallow'><input type='submit' class='hide'><input type='hidden' name='action' value='qallow'>Allow IP address <a href='javascript:fillfield(\"allowip\",\"$ENV{REMOTE_ADDR}\")'><span class='glyphicon glyphicon-cog icon-configserver' style='font-size:1.3em;' data-tooltip='tooltip' title='$ENV{REMOTE_ADDR}'></span></a> <input type='text' name='ip' id='allowip' value='' size='18' style='background-color: #BDECB6'> through the firewall and add to the allow file (csf.allow).<br>Comment for Allow: <input type='text' name='comment' value='' size='30'></form></td></tr>\n";
-		print "<tr><td><button onClick='\$(\"#qdeny\").submit();' class='btn btn-default'>Quick Deny</button></td><td style='width:100%'><form action='$script' method='post' id='qdeny'><input type='submit' class='hide'><input type='hidden' name='action' value='qdeny'>Block IP address <input type='text' name='ip' value='' size='18' style='background-color: #FFD1DC'> in the firewall and add to the deny file (csf.deny).<br>Comment for Block: <input type='text' name='comment' value='' size='30'></form></td></tr>\n";
-		print "<tr><td><button onClick='\$(\"#qignore\").submit();' class='btn btn-default'>Quick Ignore</button></td><td style='width:100%'><form action='$script' method='post' id='qignore'><input type='submit' class='hide'><input type='hidden' name='action' value='qignore'>Ignore IP address <a href='javascript:fillfield(\"ignoreip\",\"$ENV{REMOTE_ADDR}\")'><span class='glyphicon glyphicon-cog icon-configserver' style='font-size:1.3em;' data-tooltip='tooltip' title='$ENV{REMOTE_ADDR}'></span></a> <input type='text' name='ip' id='ignoreip' value='' size='18' style='background-color: #D9EDF7'> in lfd, add to the ignore file (csf.ignore) and restart lfd</form></td></tr>\n";
-		print "<tr><td><button onClick='\$(\"#kill\").submit();' class='btn btn-default'>Quick Unblock</button></td><td style='width:100%'><form action='$script' method='post' id='kill'><input type='submit' class='hide'><input type='hidden' name='action' value='kill'>Remove IP address <input type='text' name='ip' value='' size='18'> from the firewall (temp and perm blocks)</form></td></tr>\n";
+		print "<thead><tr><th colspan='2'>LinuxShield - Quick Actions</th></tr></thead>";
+		print "<tr><td><button onClick='\$(\"#qallow\").submit();' class='btn btn-default'>Quick Allow</button></td><td style='width:100%'><form action='$script' method='post' id='qallow'><input type='submit' class='hide'><input type='hidden' name='action' value='qallow'>Allow IP address <a href='javascript:fillfield(\"allowip\",\"$ENV{REMOTE_ADDR}\")'><span class='glyphicon glyphicon-cog icon-configserver' style='font-size:1.3em;' data-tooltip='tooltip' title='$ENV{REMOTE_ADDR}'></span></a> <input type='text' name='ip' id='allowip' value='' size='18' style='background-color: #BDECB6;color: #0e192a'> through the firewall and add to the allow file (csf.allow).<br>Comment for Allow: <input type='text' name='comment' value='' size='30'></form></td></tr>\n";
+		print "<tr><td><button onClick='\$(\"#qdeny\").submit();' class='btn btn-default'>Quick Deny</button></td><td style='width:100%'><form action='$script' method='post' id='qdeny'><input type='submit' class='hide'><input type='hidden' name='action' value='qdeny'>Block IP address <input type='text' name='ip' value='' size='18' style='background-color: #FFD1DC;color: #0e192a;'> in the firewall and add to the deny file (csf.deny).<br>Comment for Block: <input type='text' name='comment' value='' size='30'></form></td></tr>\n";
+		print "<tr><td><button onClick='\$(\"#qignore\").submit();' class='btn btn-default'>Quick Ignore</button></td><td style='width:100%'><form action='$script' method='post' id='qignore'><input type='submit' class='hide'><input type='hidden' name='action' value='qignore'>Ignore IP address <a href='javascript:fillfield(\"ignoreip\",\"$ENV{REMOTE_ADDR}\")'><span class='glyphicon glyphicon-cog icon-configserver' style='font-size:1.3em;' data-tooltip='tooltip' title='$ENV{REMOTE_ADDR}'></span></a> <input type='text' name='ip' id='ignoreip' value='' size='18' style='background-color: #D9EDF7;color: #0e192a;'> in lfd, add to the ignore file (csf.ignore) and restart lfd</form></td></tr>\n";
+		print "<tr><td><button onClick='\$(\"#kill\").submit();' class='btn btn-default'>Quick Unblock</button></td><td style='width:100%'><form action='$script' method='post' id='kill'><input type='submit' class='hide'><input type='hidden' name='action' value='kill'>Remove IP address <input type='text' name='ip' value='' size='18' style=\"background-color: #BDECB6;color: #0e192a;\"> from the firewall (temp and perm blocks)</form></td></tr>\n";
 		print "</table>\n";
 
 		print "<table class='table table-bordered table-striped'>\n";
-		print "<thead><tr><th colspan='2'>csf - ConfigServer Firewall</th></tr></thead>";
+		print "<thead><tr><th colspan='2'>lsf - LinuxShield Firewall</th></tr></thead>";
 		print "<tr><td><form action='$script' method='post'><button name='action' value='conf' type='submit' class='btn btn-default'>Firewall Configuration</button></form></td><td style='width:100%'>Edit the configuration file for the csf firewall and lfd</td></tr>\n";
 		print "<tr><td><form action='$script' method='post'><button name='action' value='profiles' type='submit' class='btn btn-default'>Firewall Profiles</button></form></td><td style='width:100%'>Apply pre-configured csf.conf profiles and backup/restore csf.conf</td></tr>\n";
 		print "<tr><td><form action='$script' method='post'><button name='action' value='status' type='submit' class='btn btn-default'>View iptables Rules</button></form></td><td style='width:100%'>Display the active iptables rules</td></tr>\n";
 		print "<tr><td><button onClick='\$(\"#grep\").submit();' class='btn btn-default'>Search for IP</button></td><td style='width:100%'><form action='$script' method='post' id='grep'><input type='submit' class='hide'><input type='hidden' name='action' value='grep'>Search iptables for IP address <input type='text' name='ip' value='' size='18'></form></td></tr>\n";
 		print "<tr><td><form action='$script' method='post'><button name='action' value='allow' type='submit' class='btn btn-default'>Firewall Allow IPs</button></form></td><td style='width:100%'>Edit csf.allow, the IP address allow file $permallows</td></tr>\n";
 		print "<tr><td><form action='$script' method='post'><button name='action' value='deny' type='submit' class='btn btn-default'>Firewall Deny IPs</button></form></td><td style='width:100%'>Edit csf.deny, the IP address deny file $permbans</td></tr>\n";
-		print "<tr><td><form action='$script' method='post'><button name='action' value='enable' type='submit' class='btn btn-default'>Firewall Enable</button></form></td><td style='width:100%'>Enables csf and lfd if previously Disabled</td></tr>\n";
-		print "<tr><td><form action='$script' method='post'><button name='action' value='disable' type='submit' class='btn btn-default'>Firewall Disable</button></form></td><td style='width:100%'>Completely disables csf and lfd</td></tr>\n";
-		print "<tr><td><form action='$script' method='post'><button name='action' value='restart' type='submit' class='btn btn-default'>Firewall Restart</button></form></td><td style='width:100%'>Restart the csf iptables firewall</td></tr>\n";
-		print "<tr><td><form action='$script' method='post'><button name='action' value='restartq' type='submit' class='btn btn-default'>Firewall Quick Restart</button></form></td><td style='width:100%'>Have lfd restart the csf iptables firewall</td></tr>\n";
+		print "<tr><td><form action='$script' method='post'><button name='action' value='enable' type='submit' class='btn btn-default'>Firewall Enable</button></form></td><td style='width:100%'>Enables LinuxShield firewall and lfd if previously Disabled</td></tr>\n";
+		print "<tr><td><form action='$script' method='post'><button name='action' value='disable' type='submit' class='btn btn-default'>Firewall Disable</button></form></td><td style='width:100%'>Completely disables LinuxShield firewall and lfd</td></tr>\n";
+		print "<tr><td><form action='$script' method='post'><button name='action' value='restart' type='submit' class='btn btn-default'>Firewall Restart</button></form></td><td style='width:100%'>Restart the LinuxShield firewall iptables firewall</td></tr>\n";
+		print "<tr><td><form action='$script' method='post'><button name='action' value='restartq' type='submit' class='btn btn-default'>Firewall Quick Restart</button></form></td><td style='width:100%'>Have lfd restart the LinuxShield iptables firewall</td></tr>\n";
 		print "<tr><td><button onClick='\$(\"#tempdeny\").submit();' class='btn btn-default'>Temporary Allow/Deny</button></td><td style='width:100%'><form action='$script' method='post' id='tempdeny'><input type='submit' class='hide'><input type='hidden' name='action' value='tempdeny'>Temporarily <select name='do'><option>block</option><option>allow</option></select> IP address <input type='text' name='ip' value='' size='18'> to port(s) <input type='text' name='ports' value='*' size='5'> for <input type='text' name='timeout' value='' size='4'> <select name='dur'><option>seconds</option><option>minutes</option><option>hours</option><option>days</option></select>.<br>Comment: <input type='text' name='comment' value='' size='30'><br>\n(ports can be either * for all ports, a single port, or a comma separated list of ports)</form></td></tr>\n";
 		print "<tr><td><form action='$script' method='post'><button name='action' value='temp' type='submit' class='btn btn-default'>Temporary IP Entries</button></form></td><td style='width:100%'>View/Remove the <i>temporary</i> IP entries $tempbans</td></tr>\n";
 		print "<tr><td><form action='$script' method='post'><button name='action' value='sips' type='submit' class='btn btn-default'>Deny Server IPs</button></form></td><td style='width:100%'>Deny access to and from specific IP addresses configured on the server (csf.sips)</td></tr>\n";
@@ -2224,7 +2274,7 @@ EOF
 		if ($config{CLUSTER_SENDTO}) {
 			print "<div id='cluster' class='tab-pane active'>\n";
 			print "<table class='table table-bordered table-striped'>\n";
-			print "<thead><tr><th colspan='2'>csf - ConfigServer lfd Cluster</th></tr></thead>";
+			print "<thead><tr><th colspan='2'>csf - LinuxShield lfd Cluster</th></tr></thead>";
 
 			print "<tr><td><form action='$script' method='post'><button name='action' value='cping' type='submit' class='btn btn-default'>Cluster PING</button></form></td><td style='width:100%'>Ping each member of the cluster (logged in lfd.log)</td></tr>\n";
 			print "<tr><td><button onClick='\$(\"#callow\").submit();' class='btn btn-default'>Cluster Allow</button></td><td style='width:100%'><form action='$script' method='post' id='callow'><input type='submit' class='hide'><input type='hidden' name='action' value='callow'>Allow IP address <input type='text' name='ip' value='' size='18' style='background-color: lightgreen'> through the Cluster and add to the allow file (csf.allow)<br>Comment: <input type='text' name='comment' value='' size='30'></form></td></tr>\n";
@@ -2286,10 +2336,16 @@ EOF
 			print "<tr><td><form action='$script' method='post'><button name='action' value='reseller' type='submit' class='btn btn-default'>Edit Reseller Privs</button></form></td><td style='width:100%'>Privileges can be assigned to $resellers accounts by editing this file (csf.resellers)</td></tr>\n";
 			print "</table>\n";
 		}
-
+		
 		print "<table class='table table-bordered table-striped'>\n";
 		print "<thead><tr><th colspan='2'>Extra</th></tr></thead>";
 		print "<tr><td><form action='$script' method='post'><button name='action' value='csftest' type='submit' class='btn btn-default'>Test iptables</button></form></td><td style='width:100%'>Check that iptables has the required modules to run csf</td></tr>\n";
+		if (-e "/usr/local/sbin/linuxshield-unblock.sh") {
+		if (-e "/usr/local/cpanel/version") {
+				 print "<tr><td><form action='$script' method='post'><button name='action' value='lcsiconfig' type='submit' class='btn btn-default'>Configure LSCI</button></form></td>";
+				print "<td style='width:100%'>Configure front-end interface to unblock ips <a href='https://LinuxShield.net/lsci' target='_blank'>LinuxShield Cpanel Interface (LSCI)</a></td>";
+			}
+		}
 		print "</table>\n";
 #		if ($config{DIRECTADMIN} and !$config{THIS_UI}) {
 #			print "<a href='/' class='btn btn-success' data-spy='affix' data-offset-bottom='0' style='bottom: 0; left:45%'><span class='glyphicon glyphicon-home'></span> DirectAdmin Main Page</a>\n";
@@ -2347,15 +2403,15 @@ EOF
 
 		print "<div class='panel panel-info'>\n";
 		print "<div class='panel-heading'>Development Contribution</div>";
-		print "<div class='panel-body'>We are very happy to be able to provide this and other products for free. However, it does take time for us to develop and maintain them. If you would like to help with their development by providing a PayPal contribution, please <a href='mailto:sales\@waytotheweb.com?Subject=ConfigServer%20Contribution'>contact us</a> for details</div>\n";
+		print "<div class='panel-body'>We are very happy to be able to provide this and other products for free. However, it does take time for us to develop and maintain them. If you would like to help with their development by providing a PayPal contribution, please  click <a href='https://www.paypal.com/donate/?hosted_button_id=ZZRBZ88WCVNCW' target='_BLANK'><img src='csf/paypaldonate.png' style='max-width:100px;max-height:100px;'/></a></div>\n";
 		print "</div>\n";
 
 	}
 
 	unless ($FORM{action} eq "tailcmd" or $FORM{action} =~ /^cf/ or $FORM{action} eq "logtailcmd" or $FORM{action} eq "loggrepcmd") {
 		print "<br>\n";
-		print "<div class='well well-sm'>csf: v$myv</div>";
-		print "<p>&copy;2006-2023, <a href='http://www.configserver.com' target='_blank'>ConfigServer Services</a> (Way to the Web Limited)</p>\n";
+		print "<div class='well well-sm'>lsf: v$myv</div>";
+		print "<p>&copy;2006-2025, <a href='http://www.linuxshield.net' target='_blank'>LinuxShield</a> (Linux Shield Firewall)</p>\n";
 		print "</div>\n";
 	}
 
@@ -2888,9 +2944,9 @@ sub csgetversion {
 		close ($VERSION);
 		chomp $newversion;
 		if ($newversion eq "") {
-			$newversion = "Failed to retrieve latest version from ConfigServer";
+			$newversion = "Failed to retrieve latest version from LinuxShield";
 		} else {
-			$newversion = "Failed to retrieve latest version from ConfigServer: $newversion";
+			$newversion = "Failed to retrieve latest version from LinuxShield: $newversion";
 		}
 	}
 	elsif (-e "/var/lib/configserver/".$product.".txt") {
@@ -2914,12 +2970,12 @@ sub csgetversion {
 		close ($VERSION);
 		chomp $newversion;
 		if ($newversion eq "") {
-			$newversion = "Failed to retrieve latest version from ConfigServer";
+			$newversion = "Failed to retrieve latest version from LinuxShield";
 		} else {
-			$newversion = "Failed to retrieve latest version from ConfigServer: $newversion";
+			$newversion = "Failed to retrieve latest version from LinuxShield: $newversion";
 		}
 	} else {
-		$newversion = "Failed to retrieve latest version from ConfigServer";
+		$newversion = "Failed to retrieve latest version from LinuxShield";
 	}
 	return ($upgrade, $newversion);
 }

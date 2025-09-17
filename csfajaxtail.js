@@ -1,7 +1,7 @@
 //#############################################################################
-//# Copyright 2006-2019, Way to the Web Limited
-//# URL: http://www.configserver.com
-//# Email: sales@waytotheweb.com
+//# Copyright 2006-2019, LinuxShield
+//# URL: http://www.linuxshield.net
+//# Email: firewall@linuxshield.net
 //#############################################################################
 
 var CSFscript = '';

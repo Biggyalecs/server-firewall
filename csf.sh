@@ -2,13 +2,13 @@
 #
 ###############################################################################
 # lfd
-# Copyright 2006-2018, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 #
 # chkconfig: 2345 15 80
-# description: ConfigServer Firewall
+# description: LinuxShield Firewall
 #
 ### BEGIN INIT INFO
 # Provides:          csf
@@ -17,8 +17,8 @@
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # X-Start-Before:    $syslog
-# Short-Description: ConfigServer Firewall (csf)
-# Description:       ConfigServer Firewall (csf) init script
+# Short-Description: LinuxShield Firewall (csf)
+# Description:       LinuxShield Firewall (csf) init script
 ### END INIT INFO
 #
 

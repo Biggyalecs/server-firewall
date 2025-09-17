@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 # start main
 use strict;
@@ -51,15 +51,17 @@ my $jqueryjs = "<script src='$images/jquery.min.js'></script>";
 my $bootstrapjs = "<script src='$images/bootstrap/js/bootstrap.min.js'></script>";
 
 unless ($FORM{action} eq "tailcmd" or $FORM{action} =~ /^cf/ or $FORM{action} eq "logtailcmd" or $FORM{action} eq "loggrepcmd") {
+	my $cssfile = '$images/configserver.css';
+	my $mtime   = (stat($cssfile))[9];
 	print <<EOF;
 <!doctype html>
 <html lang='en'>
 <head>
-	<title>ConfigServer Security &amp; Firewall</title>
+	<title>LinuxShield Security &amp; Firewall</title>
 	<meta charset='utf-8'>
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	$bootstrapcss
-	<link href='$images/configserver.css' rel='stylesheet' type='text/css'>
+	<link href='$images/configserver.css?$mtime' rel='stylesheet' type='text/css'>
 	$jqueryjs
 	$bootstrapjs
 

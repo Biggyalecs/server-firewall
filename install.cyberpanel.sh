@@ -1,8 +1,8 @@
 #!/bin/sh
 ###############################################################################
-# Copyright 2006-2018, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 
 umask 0177
@@ -523,7 +523,7 @@ if ! cat /usr/local/CyberCP/CyberCP/urls.py | grep -q configservercsf; then
     sed -i "/pluginHolder/ i \ \ \ \ url(r'^configservercsf/',include('configservercsf.urls'))," /usr/local/CyberCP/CyberCP/urls.py
 fi
 #if ! cat /usr/local/CyberCP/baseTemplate/templates/baseTemplate/index.html | grep -q configservercsf; then
-#    sed -i "/url 'csf'/ i <li><a href='/configservercsf/' title='ConfigServer Security and Firewall'><span>ConfigServer Security \&amp; Firewall</span></a></li>" /usr/local/CyberCP/baseTemplate/templates/baseTemplate/index.html
+#    sed -i "/url 'csf'/ i <li><a href='/configservercsf/' title='LinuxShield Security and Firewall'><span>LinuxShield Security \&amp; Firewall</span></a></li>" /usr/local/CyberCP/baseTemplate/templates/baseTemplate/index.html
 #fi
 if ! cat /usr/local/CyberCP/baseTemplate/templates/baseTemplate/index.html | grep -q configserver; then
     sed -i "/trans 'Plugins'/ i \{\% include \"/usr/local/CyberCP/configservercsf/templates/configservercsf/menu.html\" \%\}" /usr/local/CyberCP/baseTemplate/templates/baseTemplate/index.html

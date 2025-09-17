@@ -22,7 +22,7 @@ sub content {
 
     my $content = {
         'vendor' => 'Way to the Web Limited',
-        'url'    => 'www.configserver.com',
+        'url'    => 'www.linuxshield.net',
         'name'   => {
             'short'  => 'ConfigServercsf Driver',
             'long'   => 'ConfigServercsf Driver',
@@ -34,7 +34,7 @@ sub content {
     };
 
     if ($locale_handle) {
-        $content->{'abstract'} = $locale_handle->maketext("ConfigServer csf driver");
+        $content->{'abstract'} = $locale_handle->maketext("LinuxShield csf driver");
     }
 
     return $content;

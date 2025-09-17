@@ -1,9 +1,9 @@
 <?php
 /*
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 */
 
@@ -13,7 +13,7 @@ class Plugin_Configservercsf extends Plugin
     public function preAction($ctrl_act, Ctrl_Abstract $Ctrl, $action, $params)
     {
         if ($ctrl_act === 'Ctrl_Nodeworx_Firewall:index') {
-            throw new IWorx_Exception_ActionBlocked('ConfigServer Plugins > Security & Firewall, has replaced this item');
+            throw new IWorx_Exception_ActionBlocked('LinuxShield Plugins > Security & Firewall, has replaced this item');
         }
 		elseif (strpos($ctrl_act, 'Ctrl_Nodeworx_Firewall') === 0) {
 			throw new IWorx_Exception_ActionBlocked('N/A');
@@ -108,7 +108,7 @@ class Plugin_Configservercsf extends Plugin
 
     public function updateNodeworxMenu(IWorxMenuManager $MenuMan)
     {
-        $new_data = array( 'text' => 'ConfigServer Plugins',
+        $new_data = array( 'text' => 'LinuxShield Plugins',
                        'class' => 'iw-i-plugin',
                        'disabled_for_reseller' => '0' );
 

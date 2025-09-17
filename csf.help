@@ -1,13 +1,13 @@
 csf(1)							     General Commands Manual							  csf(1)
 
 NAME
-       csf - ConfigServer & Security Firewall
+       csf - LinuxShield & Security Firewall
 
 SYNOPSIS
        csf [OPTIONS]
 
 DESCRIPTION
-       This   manual   documents   the	csf  command  line  options  for  the  ConfigServer  &	Security  Firewall.  See  /etc/csf/csf.conf  and
+       This   manual   documents   the	csf  command  line  options  for  the  LinuxShield  &	Security  Firewall.  See  /etc/csf/csf.conf  and
        /etc/csf/readme.txt for more detailed information on how to use and configure this application.
 
 OPTIONS

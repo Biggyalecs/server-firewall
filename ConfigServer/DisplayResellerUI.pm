@@ -1,7 +1,7 @@
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 ## no critic (RequireUseWarnings, ProhibitExplicitReturnUndef, ProhibitMixedBooleanOperators, RequireBriefOpen)
 package ConfigServer::DisplayResellerUI;
@@ -195,7 +195,7 @@ sub main {
 		}
 		else {
 			print "<table class='table table-bordered table-striped'>\n";
-			print "<thead><tr><th align='left' colspan='2'>csf - ConfigServer Firewall options for $ENV{REMOTE_USER}</th></tr></thead>";
+			print "<thead><tr><th align='left' colspan='2'>csf - LinuxShield Firewall options for $ENV{REMOTE_USER}</th></tr></thead>";
 			if ($rprivs{$ENV{REMOTE_USER}}{ALLOW}) {print "<tr><td><form action='$script' method='post'><input type='hidden' name='action' value='qallow'><input type='submit' class='btn btn-default' value='Quick Allow'></td><td width='100%'>Allow IP address <input type='text' name='ip' id='allowip' value='' size='18' style='background-color: lightgreen'> through the firewall and add to the allow file (csf.allow).<br>Comment for Allow: <input type='text' name='comment' value='' size='30'> (required)</form></td></tr>\n"}
 			if ($rprivs{$ENV{REMOTE_USER}}{DENY}) {print "<tr><td><form action='$script' method='post'><input type='hidden' name='action' value='qdeny'><input type='submit' class='btn btn-default' value='Quick Deny'></td><td width='100%'>Block IP address <input type='text' name='ip' value='' size='18' style='background-color: pink'> in the firewall and add to the deny file (csf.deny).<br>Comment for Block: <input type='text' name='comment' value='' size='30'> (required)</form></td></tr>\n"}
 			if ($rprivs{$ENV{REMOTE_USER}}{UNBLOCK}) {print "<tr><td><form action='$script' method='post'><input type='hidden' name='action' value='qkill'><input type='submit' class='btn btn-default' value='Quick Unblock'></td><td width='100%'>Remove IP address <input type='text' name='ip' value='' size='18'> from the firewall (temp and perm blocks)</form></td></tr>\n"}
@@ -206,7 +206,7 @@ sub main {
 
 	print "<br>\n";
 	print "<pre>csf: v$myv</pre>";
-	print "<p>&copy;2006-2023, <a href='http://www.configserver.com' target='_blank'>ConfigServer Services</a> (Way to the Web Limited)</p>\n";
+	print "<p>&copy;2006-2025, <a href='http://www.linuxshield.net' target='_blank'>LinuxShield Services</a> (LinuxShield Firewall)</p>\n";
 
 	return;
 }

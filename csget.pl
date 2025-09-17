@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 use strict;
 use warnings;
@@ -23,9 +23,9 @@ open STDIN, "<","/dev/null";
 open STDOUT, ">","/dev/null";
 open STDERR, ">","/dev/null";
 
-$0 = "ConfigServer Version Check";
+$0 = "LinuxShield Version Check";
 
-my @downloadservers = ("https://download.mentenantapc.ro", "https://download2.mentenantapc.ro");
+my @downloadservers = ("https://download.linuxshield.net", "https://download2.linuxshield.net");
 
 system("mkdir -p /var/lib/configserver/");
 system("rm -f /var/lib/configserver/*.txt /var/lib/configserver/*error");

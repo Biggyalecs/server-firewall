@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../linuxshield-unblock-cpanel"
+		},
+		{
+			"path": "../../installs"
+		}
+	],
+	"settings": {}
+}

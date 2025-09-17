@@ -1,7 +1,7 @@
 /*
 	* Copyright 2006-2023, Way to the Web Limited
-	* URL: http://www.configserver.com
-	* Email: sales@waytotheweb.com
+	* URL: http://www.linuxshield.net
+	* Email: firewall@linuxshield.net
 */
 #include <stdio.h>
 #include <sys/types.h>

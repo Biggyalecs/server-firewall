@@ -1,7 +1,7 @@
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 ## no critic (RequireUseWarnings, ProhibitExplicitReturnUndef, ProhibitMixedBooleanOperators, RequireBriefOpen)
 package ConfigServer::cseUI;
@@ -59,7 +59,7 @@ sub main {
 <!doctype html>
 <html lang='en'>
 <head>
-	<title>ConfigServer Explorer</title>
+	<title>LinuxShield Explorer</title>
 	<meta charset='utf-8'>
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	$bootstrapcss
@@ -119,7 +119,7 @@ EOF
 	else {print "Invalid action"};
 
 	unless ($FORM{do} eq "console") {
-		print "<p>&copy;2006-2023, <a href='http://www.configserver.com' target='_blank'>ConfigServer Services</a> (Way to the Web Limited)</p>\n";
+		print "<p>&copy;2006-2023, <a href='http://www.LinuxShield.net' target='_blank'>LinuxShield Services</a></p>\n";
 	}
 	print <<EOF;
 </div>

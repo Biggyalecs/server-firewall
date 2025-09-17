@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 # start main
 use strict;
@@ -59,7 +59,7 @@ unless ($FORM{action} eq "tailcmd" or $FORM{action} =~ /^cf/ or $FORM{action} eq
 <!doctype html>
 <html lang='en'>
 <head>
-	<title>ConfigServer Security &amp; Firewall</title>
+	<title>LinuxShield Security &amp; Firewall</title>
 	<meta charset='utf-8'>
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	$bootstrapcss
@@ -96,7 +96,7 @@ EOF
 <div class='container-fluid'>
 <br>
 <div class='panel panel-default'>
-<h4><img src='$images/csf_small.png' style='padding-left: 10px'> ConfigServer Security &amp; Firewall - csf v$myv</h4>
+<h4><img src='$images/csf_small.png' style='padding-left: 10px'> LinuxShield Security &amp; Firewall - csf v$myv</h4>
 </div>
 EOF
 }

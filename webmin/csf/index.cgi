@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 ###############################################################################
-# Copyright 2006-2023, Way to the Web Limited
-# URL: http://www.configserver.com
-# Email: sales@waytotheweb.com
+# Copyright 2006-2025, LinuxShield
+# URL: http://www.linuxshield.net
+# Email: firewall@linuxshield.net
 ###############################################################################
 ## no critic (RequireUseWarnings, ProhibitExplicitReturnUndef, ProhibitMixedBooleanOperators, RequireBriefOpen)
 # start main
@@ -90,7 +90,7 @@ unless ($FORM{action} eq "tailcmd" or $FORM{action} =~ /^cf/ or $FORM{action} eq
 	print "<!doctype html>\n";
 	print "<html lang='en' $htmltag>\n";
 	print "<head>\n";
-	print "	<title>ConfigServer Security &amp; Firewall</title>\n";
+	print "	<title>LinuxShield Security &amp; Firewall</title>\n";
 	print "	<meta charset='utf-8'>\n";
 	print "	<meta name='viewport' content='width=device-width, initial-scale=1'>\n";
 	print "	$bootstrapcss\n";
